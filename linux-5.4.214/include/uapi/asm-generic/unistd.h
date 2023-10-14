@@ -850,10 +850,12 @@ __SYSCALL(__NR_pidfd_open, sys_pidfd_open)
 #define __NR_clone3 435
 __SYSCALL(__NR_clone3, sys_clone3)
 #endif
+#define __NR_mycall 460
+__SYSCALL(__NR_mycall, sys_mycall)
 
 #undef __NR_syscalls
-#define __NR_syscalls 436
-
+//#define __NR_syscalls 436
+#define __NR_syscalls 461
 /*
  * 32 bit systems traditionally used different
  * syscalls for off_t and loff_t arguments, while
