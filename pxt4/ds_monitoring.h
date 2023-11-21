@@ -46,7 +46,6 @@ struct ds_monitoring_elem {
 	extern struct ds_monitoring name;
 
 void find_ds_monitoring(struct ds_monitoring *dm, void *elem);
-static void insert_ds_monitoring(struct ds_monitoring *dm, unsigned long index, void *elem);
 void print_ds_monitoring(struct ds_monitoring* dm);
 void delete_ds_monitoring(struct ds_monitoring *dm);
 
