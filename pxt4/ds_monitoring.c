@@ -1,4 +1,5 @@
 #include "ds_monitoring.h"
+#include <linux/slab.h>
 
 void find_ds_monitoring(struct ds_monitoring *dm, void *elem)
 {
@@ -16,7 +17,7 @@ void find_ds_monitoring(struct ds_monitoring *dm, void *elem)
                 __sync_fetch_and_add(&dm->total_counts, 1);
         }
 }
-
+static void 
 insert_ds_monitoring(struct ds_monitoring *dm, unsigned long index, void *elem)
 {
         char *name;
