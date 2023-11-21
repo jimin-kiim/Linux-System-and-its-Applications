@@ -23,7 +23,7 @@ struct ds_monitoring_elem {
 	unsigned long long count;
 };
 
-#define DEFINE_DS_MONITORING(name, get_idx_fn, get_name_fn, print_fn); \
+#define DEFINE_DS_MONITORING(name, get_idx_fn, get_name_fn, print_fn) \
 	DEFINE_XARRAY(name##xarray); \
 	DEFINE_DS_MONITORING_OPS(name, get_idx_fn, get_name_fn, print_fn);\
 	struct ds_monitoring name = DS_MONITORING_INIT(name##xarray, name##_dm_ops);
@@ -42,7 +42,7 @@ struct ds_monitoring_elem {
 	.dm_ops = &_dm_ops, \
 }
 
-#define DECLARE_DS_MONITORING (name) \
+#define DECLARE_DS_MONITORING(name) \
 	extern struct ds_monitoring name;
 
 void find_ds_monitoring(struct ds_monitoring *dm, void *elem);
