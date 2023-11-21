@@ -1,19 +1,15 @@
 #include <linux/xarray.h>
 
-
-
 struct ds_monitoring_operations {
-        unsigned long (*get_index)(void *elem);
-        const char * (*get_name)(void *elem);
-        void (*print_elem)(
-                        unsigned long index,
-                        const char *name,
-                        unsigned long long count,
-                        int percentage
-                        );
+	unsigned long (*get_index)(void *elem);
+	const char * (*get_name)(void *elem);
+	void (*print_elem)(
+			unsigned long index,
+			const char *name,
+			unsigned long long count,
+			int percentage
+			);
 };
-
-
 
 struct ds_monitoring {
 	struct xarray *elements;
@@ -52,5 +48,3 @@ struct ds_monitoring_elem {
 void find_ds_monitoring(struct ds_monitoring *dm, void *elem);
 void print_ds_monitoring(struct ds_monitoring* dm);
 void delete_ds_monitoring(struct ds_monitoring *dm);
-
-
