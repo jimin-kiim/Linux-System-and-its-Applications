@@ -1,22 +1,6 @@
 #include "ds_monitoring.h"
 #include <linux/slab.h>
 
-void find_ds_monitoring(struct ds_monitoring *dm, void *elem)
-{
-        struct ds_monitoring_elem *cur;
-        unsigned long xa_index;
-        if (dm->dm_ops->get_index) {
-                xa_index = dm->dm_ops->get_index(elem);
-                // search ds_monitoring_elem at index of xa_index from xarray root
-                cur = (struct ds_monitoring_elem *) xa_load(dm->elements, xa_index);
-                if (cur) {
-                        __sync_fetch_and_add(&cur->count, 1);
-                } else {
-                        insert_ds_monitoring(dm, xa_index, elem);
-                }
-                __sync_fetch_and_add(&dm->total_counts, 1);
-        }
-}
 static void 
 insert_ds_monitoring(struct ds_monitoring *dm, unsigned long index, void *elem)
 {
@@ -33,6 +17,23 @@ insert_ds_monitoring(struct ds_monitoring *dm, unsigned long index, void *elem)
                 new->name = NULL;
         }
         xa_store(dm->elements, new->key, (void*) new, GFP_KERNEL);
+}
+
+void find_ds_monitoring(struct ds_monitoring *dm, void *elem)
+{
+        struct ds_monitoring_elem *cur;
+        unsigned long xa_index;
+        if (dm->dm_ops->get_index) {
+                xa_index = dm->dm_ops->get_index(elem);
+                // search ds_monitoring_elem at index of xa_index from xarray root
+                cur = (struct ds_monitoring_elem *) xa_load(dm->elements, xa_index);
+                if (cur) {
+                        __sync_fetch_and_add(&cur->count, 1);
+                } else {
+                        insert_ds_monitoring(dm, xa_index, elem);
+                }
+                __sync_fetch_and_add(&dm->total_counts, 1);
+        }
 }
 
 void print_ds_monitoring(struct ds_monitoring* dm)
