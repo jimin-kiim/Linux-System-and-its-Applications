@@ -1,3 +1,6 @@
+#ifndef __DS_MONITORING_H
+#define __DS_MONITORING_H
+
 #include <linux/xarray.h>
 
 struct ds_monitoring_operations {
@@ -48,3 +51,5 @@ struct ds_monitoring_elem {
 void find_ds_monitoring(struct ds_monitoring *dm, void *elem);
 void print_ds_monitoring(struct ds_monitoring* dm);
 void delete_ds_monitoring(struct ds_monitoring *dm);
+
+#endif
