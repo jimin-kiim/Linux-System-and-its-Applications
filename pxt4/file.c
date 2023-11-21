@@ -287,6 +287,25 @@ out:
 	inode_unlock(inode);
 	return ret;
 }
+
+#include "ds_monitoring.h"
+static unsigned long get_cpu_id(void *elem) 
+{
+	return current->cpu;
+}
+
+static const char * get_cpu_name(void *elem) 
+{
+	return "";
+}
+
+static void print_cpu_dm(unsigned long id, const char * name, unsigned long long count, int percentage) 
+{
+	printk("cpu %ld called pxt4_file_write_iter() %lld times (%d%%)\n", id, count, percentage);
+}
+
+
+DEFINE_DS_MONITORING(cpu_dm, get_cpu_id, get_cpu_name,  print_cpu_dm);
 unsigned long long file_write_iter_time, file_write_iter_count;
 
 static ssize_t pxt4_file_write_iter(struct kiocb *iocb, struct iov_iter *from) {
@@ -297,7 +316,8 @@ static ssize_t pxt4_file_write_iter(struct kiocb *iocb, struct iov_iter *from) {
 	ret = pxt4_file_write_iter_internal(iocb, from);
 	getrawmonotonic(&myclock[1]);
 	calclock(myclock, &file_write_iter_time, &file_write_iter_count);
-	printk("cpu[%d] called pxt4_file_write_iter()",current->cpu);
+	//printk("cpu[%d] called pxt4_file_write_iter()",current->cpu);
+	find_ds_monitoring(&cpu_dm, current);
 	return ret;
 }
 
