@@ -8,19 +8,20 @@
 #define BILLION 1000000000UL
 #define CONFIG_CALCLOCK
 
-unsigned long long calclock(struct timespec *myclock, 
-		unsigned long long *total_time, unsigned long long *total_clock);
-
 struct calclock {
 	ktime_t time;
 	unsigned long long count;
 };
 
+//unsigned long long calclock(struct timespec *myclock, 
+		unsigned long long *total_time,
+	       	unsigned long long *total_count);
+
 #define KTDEF(funcname) \
-DEFINE_PER_CPU(struct calclock, funcname##_clock) = {0, 0}
+	DEFINE_PER_CPU(struct calclock, funcname##_clock) = {0, 0}
 
 #define KTDEC(funcname) \
-DECLARE_PER_CPU(struct calclock, funcname##_clock)
+	DECLARE_PER_CPU(struct calclock, funcname##_clock)
 
 #ifdef CONFIG_CALCLOCK
 static inline void ktget(ktime_t *clock)
@@ -37,35 +38,35 @@ static inline void __ktput(ktime_t localclocks[], ktime_t *clock_time)
 	*clock_time = ktime_add_safe(*clock_time, diff);
 }
 
-#define ktput(localclocks, funcname)						\
-do {										\
-	struct calclock *clock;							\
-	bool prmpt_enabled = preemptible();					\
-										\
-	if (prmpt_enabled)							\
-		preempt_disable();						\
-	clock = this_cpu_ptr(&(funcname##_clock));				\
-	__ktput(localclocks, &clock->time);					\
-	clock->count++; 							\
-	if (prmpt_enabled)							\
-		put_cpu_ptr(&(funcname##_clock));				\
-} while (0)
+#define ktput(localclocks, funcname)							\
+	do {										\
+		struct calclock *clock;							\
+		bool prmpt_enabled = preemptible();					\
+											\
+		if (prmpt_enabled)							\
+		preempt_disable();							\
+		clock = this_cpu_ptr(&(funcname##_clock));				\
+		__ktput(localclocks, &clock->time);					\
+		clock->count++; 							\
+		if (prmpt_enabled)							\
+		put_cpu_ptr(&(funcname##_clock));					\
+	} while (0)
 
 void __ktprint(int depth, char *func_name, ktime_t time, unsigned long long count);
 
-#define ktprint(depth, funcname)						\
-do {										\
-	int cpu;								\
-	ktime_t timesum = 0;							\
-	unsigned long long countsum = 0;					\
-										\
-	for_each_online_cpu(cpu) {						\
-		struct calclock *clock = per_cpu_ptr(&funcname##_clock, cpu);	\
-		timesum += clock->time;						\
-		countsum += clock->count;					\
-	}									\
-	__ktprint(depth, #funcname, timesum, countsum);				\
-} while (0)
+#define ktprint(depth, funcname)							\
+	do {										\
+		int cpu;								\
+		ktime_t timesum = 0;							\
+		unsigned long long countsum = 0;					\
+											\
+		for_each_online_cpu(cpu) {						\
+			struct calclock *clock = per_cpu_ptr(&funcname##_clock, cpu);	\
+			timesum += clock->time;						\
+			countsum += clock->count;					\
+		}									\
+		__ktprint(depth, #funcname, timesum, countsum);				\
+	} while (0)
 
 #else /* !CONFIG_CALCLOCK */
 #define ktget(clock)
