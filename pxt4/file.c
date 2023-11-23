@@ -308,16 +308,22 @@ static void print_cpu_dm(unsigned long id, const char * name, unsigned long long
 DEFINE_DS_MONITORING(cpu_dm, get_cpu_id, get_cpu_name,  print_cpu_dm);
 unsigned long long file_write_iter_time, file_write_iter_count;
 
+KTDEF(pxt4_file_write_iter_internal);
 static ssize_t pxt4_file_write_iter(struct kiocb *iocb, struct iov_iter *from) {
 	ssize_t ret;
-	struct timespec myclock[2];
+	//struct timespec myclock[2];
+	ktime_t stopwatch[2];
 
-	getrawmonotonic(&myclock[0]);
+	//getrawmonotonic(&myclock[0]);
+	ktget(&stopwatch[0]);
 	ret = pxt4_file_write_iter_internal(iocb, from);
-	getrawmonotonic(&myclock[1]);
-	calclock(myclock, &file_write_iter_time, &file_write_iter_count);
+	//getrawmonotonic(&myclock[1]);
+	ktget(&stopwatch[1]);
+	//calclock(myclock, &file_write_iter_time, &file_write_iter_count);
+	ktput(stopwatch, pxt4_file_write_iter_internal);
+
 	//printk("cpu[%d] called pxt4_file_write_iter()",current->cpu);
-	find_ds_monitoring(&cpu_dm, current);
+	//find_ds_monitoring(&cpu_dm, current);
 	return ret;
 }
 
