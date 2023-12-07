@@ -8,7 +8,7 @@
 #include <linux/spinlock.h>
 #include <linux/slab.h>
 #include <linux/sched.h>
-#include "calclock.h"
+#include "../calclock.h"
 
 #define NUM_THREADS 4
 static struct task_struct *threads[NUM_THREADS];
@@ -31,7 +31,7 @@ void *add_to_list(int thread_id, int range_bound[]) {
 	struct my_node *first = NULL;
 
 	int i;
-	for (i = range_bound[0]; i < range_bound[1] + 1; i++) {
+	for (i = range_bound[0]; i <= range_bound[1]; i++) {
 		struct my_node *new = kmalloc(sizeof(struct my_node), GFP_KERNEL);
 		new->data = i;
 
@@ -65,7 +65,7 @@ int search_list(int thread_id, void *data, int range_bound[]) {
 	return 0;
 }
 
-int delete_from_list(int thread_id, int range_bound[2]) {
+int delete_from_list(int thread_id, int range_bound[]) {
 	struct my_node *cur, *tmp;
 	struct timespec localclock[2];
 	list_for_each_entry_safe(cur, tmp, &my_list, list) {
