@@ -198,7 +198,6 @@ again:
 
 	return written ? written : status;
 }
-EXPORT_SYMBOL(generic_perform_write);
 
 /**
  * __generic_file_write_iter - write data to a file
@@ -294,5 +293,3 @@ out:
 	current->backing_dev_info = NULL;
 	return written ? written : err;
 }
-EXPORT_SYMBOL(__generic_file_write_iter);
-
