@@ -12,6 +12,7 @@ DEFINE_SPINLOCK(my_lock);
 //};
 
 //struct list_head my_list;
+LIST_HEAD(my_list);
 
 unsigned long long count_insert, count_search, count_delete;
 unsigned long long time_insert, time_search, time_delete;

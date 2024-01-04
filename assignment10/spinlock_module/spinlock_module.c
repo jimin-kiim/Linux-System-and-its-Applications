@@ -44,7 +44,7 @@ int __init spinlock_module_init(void) {
 	int i;
 	
 	printk("Entering Spinlock Module!\n");
-	INIT_LIST_HEAD(&my_list);
+	//INIT_LIST_HEAD(&my_list);
 	
 	for (i = 0; i < NUM_THREADS; i++) {
 		int* arg = (int*)kmalloc(sizeof(int), GFP_KERNEL);
