@@ -3268,6 +3268,10 @@ struct page *grab_cache_page_write_begin(struct address_space *mapping,
 EXPORT_SYMBOL(grab_cache_page_write_begin);
 #endif 
 
+#include "../calclock.h"
+
+unsigned long long dirty_pages_time, dirty_pages_count;
+
 ssize_t pxt4_generic_perform_write(struct file *file,
 				struct iov_iter *i, loff_t pos)
 {
@@ -3345,7 +3349,14 @@ again:
 		pos += copied;
 		written += copied;
 
+		struct timespec myclock[2];
+		getrawmonotonic(&myclock[0]);
+		
 		balance_dirty_pages_ratelimited(mapping);
+
+		getrawmonotonic(&myclock[1]);
+		calclock(myclock, &dirty_pages_time, &dirty_pages_count);
+
 	} while (iov_iter_count(i));
 
 	return written ? written : status;

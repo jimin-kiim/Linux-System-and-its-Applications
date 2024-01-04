@@ -6338,6 +6338,8 @@ out7:
 DECLARE_DS_MONITORING(cpu_dm);
 
 extern unsigned long long file_write_iter_time, file_write_iter_count;
+extern unsigned long long dirty_pages_time, dirty_pages_count;
+
 static void __exit pxt4_exit_fs(void)
 {
 	pxt4_destroy_lazyinit_thread();
@@ -6353,8 +6355,9 @@ static void __exit pxt4_exit_fs(void)
 	pxt4_exit_es();
 	pxt4_exit_pending();
 
-	printk("pxt4_file_write_iter is called %llu times and the time interval is %lluns\n", file_write_iter_count, file_write_iter_time);
-	print_ds_monitoring(&cpu_dm);
+	printk("file_write_iter is called %llu times and the time interval is %lluns\n", file_write_iter_count, file_write_iter_time);
+	//print_ds_monitoring(&cpu_dm);
+	printk("balance_dirty_pages_ratelimited is called %llu times, and the time interval is %lluns\n", dirty_pages_time, dirty_pages_count);
 	delete_ds_monitoring(&cpu_dm);
 }
 
