@@ -24,11 +24,11 @@ void set_iter_range(int thread_id, int range_bound[2]) {
 
 static int work_fn(void *data)
 {
+	void *ret;
 	int range_bound[2];
 	int thread_id = *(int*) data;
 	set_iter_range(thread_id, range_bound);
-
-	void *ret = add_to_list(thread_id, range_bound);
+	ret = add_to_list(thread_id, range_bound);
 	search_list(thread_id, ret, range_bound);
 	delete_from_list(thread_id, range_bound);
 	
@@ -41,11 +41,11 @@ static int work_fn(void *data)
 }
 
 int __init spinlock_module_init(void) {
+	int i;
+	
 	printk("Entering Spinlock Module!\n");
 	INIT_LIST_HEAD(&my_list);
-	//spin_lock_init(&my_lock);
 	
-	int i;
 	for (i = 0; i < NUM_THREADS; i++) {
 		int* arg = (int*)kmalloc(sizeof(int), GFP_KERNEL);
 		*arg = i;
@@ -55,11 +55,12 @@ int __init spinlock_module_init(void) {
 }
 
 void __exit spinlock_module_cleanup(void) {
+	int i;
+
 	printk(KERN_INFO"%s: Spinlock linked list insert time: %llu ms, count: %llu", __func__, time_insert, count_insert);
 	printk(KERN_INFO"%s: Spinlock linked list search time: %llu ms, count: %llu", __func__, time_search, count_search);
 	printk(KERN_INFO"%s: Spinlock linked list delete time: %llu ms, count: %llu", __func__, time_delete, count_delete);
 	
-	int i;
 	for(i = 0; i < NUM_THREADS; i++) {
 		kthread_stop(threads[i]);
 		printk("thread #%d stopped!", i + 1);
