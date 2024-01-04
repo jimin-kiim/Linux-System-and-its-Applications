@@ -44,7 +44,6 @@ int __init spinlock_module_init(void) {
 	int i;
 	
 	printk("Entering Spinlock Module!\n");
-	//INIT_LIST_HEAD(&my_list);
 	
 	for (i = 0; i < NUM_THREADS; i++) {
 		int* arg = (int*)kmalloc(sizeof(int), GFP_KERNEL);
@@ -56,15 +55,13 @@ int __init spinlock_module_init(void) {
 
 void __exit spinlock_module_cleanup(void) {
 	int i;
-
 	printk(KERN_INFO"%s: Spinlock linked list insert time: %llu ms, count: %llu", __func__, time_insert, count_insert);
 	printk(KERN_INFO"%s: Spinlock linked list search time: %llu ms, count: %llu", __func__, time_search, count_search);
 	printk(KERN_INFO"%s: Spinlock linked list delete time: %llu ms, count: %llu", __func__, time_delete, count_delete);
-	
-	for(i = 0; i < NUM_THREADS; i++) {
+
+	for (i = 0; i < NUM_THREADS; i++) 
 		kthread_stop(threads[i]);
-		printk("thread #%d stopped!", i + 1);
-	}
+	
 	printk(KERN_INFO"%s: Exiting Spinlock Module!\n", __func__);
 }
 
