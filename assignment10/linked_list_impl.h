@@ -1,6 +1,8 @@
 #ifndef _LINKED_LIST_IMPL_H
 #define _LINKED_LIST_IMPL_H
-
+#include <linux/kernel.h> 
+#include <linux/module.h>
+#include <linux/slab.h>
 
 struct my_node {
         struct list_head list;
