@@ -13,8 +13,8 @@ DEFINE_SPINLOCK(my_lock);
 
 //struct list_head my_list;
 
-//unsigned long long count_insert, count_search, count_delete;
-//unsigned long long time_insert, time_search, time_delete;
+unsigned long long count_insert, count_search, count_delete;
+unsigned long long time_insert, time_search, time_delete;
 
 void *add_to_list(int thread_id, int range_bound[]) {
         struct timespec localclock[2];
