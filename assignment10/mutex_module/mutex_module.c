@@ -2,7 +2,6 @@
 #include <linux/init.h>
 #include <linux/kthread.h>
 #include <linux/delay.h>
-#include <linux/mutex.h>
 #include "../calclock.h"
 #include "../linked_list_impl.h"
 
@@ -24,7 +23,7 @@ static int work_fn(void *data)
 	void *ret;
 
 	set_iter_range(thread_id, range_bound);
-	add_to_list(thread_id, range_bound);
+	ret = add_to_list(thread_id, range_bound);
 	search_list(thread_id, ret, range_bound);
 	delete_from_list(thread_id, range_bound);
 

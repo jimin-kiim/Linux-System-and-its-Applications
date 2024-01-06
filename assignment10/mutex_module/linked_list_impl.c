@@ -27,7 +27,7 @@ void *add_to_list(int thread_id, int range_bound[]) {
                 
 		if (first == NULL) first = new;
         }
-        mutex_lock(&my_lock);
+        mutex_unlock(&my_lock);
        
        	printk(KERN_INFO "thread #%d range: %d ~ %d\n",thread_id, range_bound[0], range_bound[1]);
        
