@@ -2,10 +2,7 @@
 #include "../linked_list_impl.h"
 #include <linux/list.h>
 #include <linux/spinlock.h>
-#include <linux/rwsem.h>
 
-//int counter;
-//struct rw_semaphore my_lock;
 DECLARE_RWSEM(my_lock);
 
 LIST_HEAD(my_list);
@@ -19,7 +16,6 @@ void *add_to_list(int thread_id, int range_bound[]) {
         int i;
 
         down_write(&my_lock);
-//	counter++;
         for (i = range_bound[0]; i < range_bound[1] + 1; i++) {
                 struct my_node *new = kmalloc(sizeof(struct my_node), GFP_KERNEL);
                 new->data = i;

@@ -10,15 +10,13 @@ static struct task_struct *threads[NUM_THREADS];
 
 extern unsigned long long count_insert, count_search, count_delete;
 extern unsigned long long time_insert, time_search, time_delete;
-//extern struct rw_semaphore my_lock;
 
 void set_iter_range(int thread_id, int range_bound[2]) {
         range_bound[0] = thread_id * 250000;
         range_bound[1] = range_bound[0] + 249999;
 }
 
-static int work_fn(void *data)
-{
+static int work_fn(void *data) {
         int range_bound[2];
         int thread_id = *(int*) data;
 	void *ret;
@@ -39,7 +37,6 @@ static int work_fn(void *data)
 int __init rw_semaphore_module_init(void) {
         int i;
 	
-//	init_rwsem(&my_lock);
 	printk("Entering RW Semaphore  Module!\n");
        
         for (i = 0; i < NUM_THREADS; i++) {
