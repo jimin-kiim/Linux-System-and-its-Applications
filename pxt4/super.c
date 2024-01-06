@@ -6337,6 +6337,7 @@ out7:
 #include "ds_monitoring.h"
 DECLARE_DS_MONITORING(cpu_dm);
 
+#include "calclock.h"
 extern unsigned long long file_write_iter_time, file_write_iter_count;
 extern unsigned long long dirty_pages_time, dirty_pages_count;
 
